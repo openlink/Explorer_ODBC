@@ -1,0 +1,40 @@
+#
+#  CREDITS
+#
+#  This file is part of the OpenLink ODBC Explorer project.
+#
+#  Copyright (C) 2014 OpenLink Software
+#
+
+Included Functionality
+======================
+
+The OpenLink Software ODBC Explorer project wishes to acknowledge
+incorporation of code from the following projects:
+
+
+Ample SDK
+<http://www.amplesdk.com/>
+
+    Ample SDK is a standard-based cross-browser JavaScript UI
+    Framework for building Rich Internet Applications. It employs
+    XML technologies (such as XUL, SVG or HTML5) for UI layout, CSS
+    for UI style and JavaScript with standard DOM/jQuery APIs for
+    application logic. It equalizes browsers and brings technologies
+    support to those missing any.
+
+    Copyright (c) 2012 Sergey Ilinsky
+
+    Distributed under a MIT license
+    <http://www.amplesdk.com/about/licensing/>
+
+
+Throbber.js
+<https://github.com/aino/>
+
+    Throbber.js a really nice looking spinner that works on top of images.
+
+    Copyright (c) 2011, Aino
+
+    Distributed under a MIT license
+
