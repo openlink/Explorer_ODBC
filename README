@@ -1,0 +1,19 @@
+OpenLink ODBC Explorer
+======================
+
+The OpenLink ODBC Explorer is a simple iSQL-like sample HTML5 program
+which allows connection to any browser-local ODBC DSN (Data Source
+Name).
+
+Once connected, a list of available database catalogs is displayed,
+and users can easily explore the database schema and/or execute
+queries against it.
+
+This project uses the HTML5 WebDB to ODBC plugin from Openlink:
+
+http://github.com/openlink/WebDB_ODBC
+
+
+Documentation, binaries and installation instructions can be found at:
+
+http://wikis.openlinksw.com/dataspace/owiki/wiki/UdaWikiWeb/HTML5ODBCExplorerSampleProg
