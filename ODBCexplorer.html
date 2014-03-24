@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>ODBC explorer</title>
+    <script type="text/javascript" src="./ample/runtime.js"></script>
+    <script type="text/javascript" src="./ample/languages/xul/xul.js"></script>
+    <script type="text/javascript" src="./ample/languages/xhtml/xhtml.js"></script>
+
+    <link type="text/ample+css" href="./ample/languages/xul/themes/default/style.css" rel="stylesheet"/>
+
+    <script type="text/javascript" src="throbber.js"></script>
+    <script type="text/javascript" src="ODBCexplorer.js"></script>
+
+    <style type="text/css">
+	html, body {
+		width:	100%;
+		height: 100%;
+		padding:0;
+		margin:	0;
+		overflow:hidden;
+	}
+	body {
+		border: 0;
+	        font-family:Verdana, Tahoma, Arial, sans-serif;
+	        font-size: 13px;
+	}
+	.linkInt {
+		color: #0B7300;
+		text-decoration: underline;
+		cursor: pointer;
+	}
+	.linkExt {
+		color: #0000ff;
+		text-decoration: underline;
+		cursor: pointer;
+	}
+    </style>
+
+<!--[if IE]>
+  <object id="webdb-odbc" type="application/iodbc" width="1" height="1">
+  </object>
+<![endif]-->
+
+  </head>
+
+  <body>
+  <table>
+  <tr>
+<!--
+  <td>
+   &nbsp;&nbsp;WebID:
+  <input type="file" id="webfile" size="40">
+   &nbsp;&nbsp;
+  </td>
+-->  
+  <td>
+   &nbsp;&nbsp;DSN:
+  <SELECT id="dsn" style="width: 200px;" onfocus="initDSN()" onkeyup="onKeyUp('dsn',event)">
+   <OPTION selected>virt</OPTION>
+  </SELECT>
+   &nbsp;&nbsp;
+  </td>
+
+  <td>
+   User:
+  </td>
+  <td>
+  <input id="uid" value="dba" style="width: 150px;" type="text" onkeyup="onKeyUp('uid',event)">
+  </td>
+  <td>
+   Password:
+  </td>
+  <td>
+  <input id="pwd" value="dba" style="width: 150px;" type="password" onkeyup="onKeyUp('pwd',event)">
+  </td>
+  <td>
+  <input id="connect" value="Connect" onclick="Connection()" onkeyup="onKeyUp('connect',event)" type="button">
+  </td>
+  <td style="text-align: right" width="100px">
+   Ver: 1.40
+  </td>
+  </tr>
+  </table>
+
+   <script type="application/ample+xml">
+
+<xul:page
+  xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml"
+  xmlns:xi="http://www.w3.org/2001/XInclude">
+
+  <xul:spacer height="10"/>
+
+  <xul:hbox flex="1" width="100%">
+    
+    <xul:vbox id="mydb" width="210" minwidth="200" >
+
+      <xul:tree flex="1" id="db" >
+        <xul:treecols>
+	  <xul:treecol id="dbcol" label="DbCatalogs" width="200" primary="true"/>
+	</xul:treecols>
+	<xul:treebody>
+	  <xul:treechildren id="dbList">
+	  </xul:treechildren>
+	</xul:treebody>
+      </xul:tree>  
+
+    </xul:vbox>
+
+    <xul:splitter />
+
+    <xul:vbox flex="1">
+
+      <xul:tabbox flex="1">
+        <xul:tabs id="tabs">
+		<xul:tab label="Structure"/>
+		<xul:tab label="Primary Keys"/>
+		<xul:tab label="Foreign Keys"/>
+		<xul:tab id="reftab" label="References"/>  
+		<xul:tab label="Execute SQL"/>
+	</xul:tabs>
+	<xul:tabpanels>		
+	  <xul:tabpanel id="stru" >
+
+	    <xul:listbox  flex="1" id="structTable" height="500"/>
+
+	  </xul:tabpanel>
+
+	  <xul:tabpanel id="idx">
+
+            <xul:vbox flex="1">
+	      <xul:spacer height="5"/>
+              <xul:hbox height="25" pack="end">
+	        <xul:spacer width="10"/>
+	        <a id="idx_plink" target="_blank" href="" > permalink </a>
+	        <xul:spacer width="10"/>
+                <xul:button id="buttonPBack" label="Back" disabled="true" onclick="clickBack('idxTable')" />
+	        <xul:spacer width="5"/>
+              </xul:hbox>
+	      <xul:listbox  id="idxTable" height="500"/>
+            </xul:vbox>
+
+	  </xul:tabpanel>
+
+	  <xul:tabpanel id="fkey">
+
+            <xul:vbox flex="1">
+	      <xul:spacer height="5"/>
+              <xul:hbox height="25" pack="end">
+	        <xul:spacer width="10"/>
+	        <a id="fkey_plink" target="_blank" href="" > permalink </a>
+	        <xul:spacer width="10"/>
+                <xul:button id="buttonFBack" label="Back" disabled="true" onclick="clickBack('fkeyTable')" />
+	        <xul:spacer width="5"/>
+              </xul:hbox>
+	      <xul:listbox  id="fkeyTable" height="500"/>
+            </xul:vbox>
+
+	  </xul:tabpanel>
+
+	  <xul:tabpanel id="ref">
+
+            <xul:vbox flex="1">
+	      <xul:spacer height="5"/>
+              <xul:hbox height="25" pack="end">
+	        <xul:spacer width="10"/>
+	        <a id="ref_plink" target="_blank" href="" > permalink </a>
+	        <xul:spacer width="10"/>
+                <xul:button id="buttonRBack" label="Back" disabled="true" onclick="clickBack('refTable')" />
+	        <xul:spacer width="5"/>
+              </xul:hbox>
+	      <xul:listbox  id="refTable" height="500"/>
+            </xul:vbox>
+
+	  </xul:tabpanel>
+
+	  <xul:tabpanel id="exec">
+          	
+            <xul:vbox flex="1">
+  
+              <xul:textbox width="100%" height="50" id="txtSqlStatement" multiline="true" rows="5" value="SELECT * FROM test" /> 
+
+              <xul:splitter resizeafter="true" resizebefore="false"/>
+
+	      <xul:spacer height="5"/>
+              <xul:hbox height="20">
+	        <xul:spacer width="5"/>
+                <xul:button id="buttonRun" label="RunSQL" onclick="clickExecQuery()" />
+	        <xul:spacer width="20"/>
+                <xul:textbox id="sqlLastError" readonly="true" flex="2" />
+
+	        <xul:spacer width="10"/>
+	        <a id="exec_plink" target="_blank" href="" > permalink </a>
+	        <xul:spacer width="10"/>
+                <xul:button id="buttonPrev" label="Prev_Query" disabled="true" onclick="prevQuery()" />
+
+              </xul:hbox>
+   	      <xul:spacer height="5"/>
+
+              <xul:hbox flex="2" height="450">
+	        <xul:listbox  flex="2" id="execTable" height="410"/>
+              </xul:hbox>
+            </xul:vbox>
+
+	  </xul:tabpanel>
+	</xul:tabpanels>
+      </xul:tabbox>
+
+    </xul:vbox>
+
+  </xul:hbox>
+
+
+</xul:page>
+
+<xul:dialog id="badconf" title="Setup Error" width="400" height="300" hidden="true"
+  xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+  xmlns:xi="http://www.w3.org/2001/XInclude">
+
+   <xul:vbox>
+    <xul:spacer height="20"/>
+     Could not locate Openlink HTML5 iODBC component!
+     Goto to 
+     http://wikis.openlinksw.com/dataspace/owiki/wiki/UdaWikiWeb/InstallConfigODBCHTML5Bridge
+     for get properly details
+   </xul:vbox>
+</xul:dialog>
+
+<xul:window id="wthrobber" hidechrome="true" width="60" height="50" style="background-color:silver;" hidden="true"
+  xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+  xmlns:xi="http://www.w3.org/2001/XInclude">
+
+   <xul:box align="center" pack="stretch">
+    <canvas id="cv" width="30" height="30"></canvas>
+<!--
+    <xul:image src="throbber.gif"/>
+-->
+   </xul:box>
+</xul:window>
+
+<xul:window id="wrestore" hidechrome="true" width="140" height="40" style="background-color:silver;" hidden="true"
+  xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+  xmlns:xi="http://www.w3.org/2001/XInclude">
+
+   <xul:hbox align="center" pack="stretch">
+    <xul:spacer width="20"/>
+    Restore
+    <xul:spacer width="20"/>
+    <xul:image src="throbber.gif"/>
+    <xul:spacer width="20"/>
+   </xul:hbox>
+</xul:window>
+
+   </script>
+  </body>
+</html>
