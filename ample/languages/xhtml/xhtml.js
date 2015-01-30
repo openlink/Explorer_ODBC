@@ -2150,7 +2150,7 @@ cXHTMLElement_input.prototype.$mapAttribute	= function(sName, sValue) {
 	}
 	else
 	if (sName == "placeholder") {
-		this.$getContainer("placeholder").innerHTML	= sValue || '';
+		this.$getContainer("placeholder").innerHTML	= ample.$encodeXMLCharacters(sValue || '');
 	}
 	else
 	if (sName == "checked") {
@@ -2441,7 +2441,7 @@ cXHTMLElement_option.prototype.$mapAttribute	= function(sName, sValue) {
 		this.$setPseudoClass("selected", sValue != null && sValue != "false");
 	else
 	if (sName == "label")
-		this.$getContainer("gateway").innerHTML	= sValue || '';
+		this.$getContainer("gateway").innerHTML	= ample.$encodeXMLCharacters(sValue || '');
 	else
 		cXHTMLElement.prototype.$mapAttribute.call(this, sName, sValue);
 };
