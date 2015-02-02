@@ -49,7 +49,7 @@ var g_restoring_state = false;
 var g_permalink_view = false;
 var g_err_in_ref_sparql = false;
 
-var initH = null;
+
 
 ample.ready(function() {
   if (navigator.userAgent.match(/AppleWebKit/) && !navigator.userAgent.match(/MSIE/)) {
@@ -87,19 +87,12 @@ ample.ready(function() {
     }
   }
 
-  initH = setTimeout(DoLoadPermalink, DEF_TIMEOUT);
-
-});
-
-
-function DoLoadPermalink()
-{
   var params = document.location.search;
   if (params!=null && params.length>2)
     loadPermalink(params);
 
-  initH = null;
-}
+});
+
 
 
 var dsnloaded = false;
@@ -196,7 +189,6 @@ function DoConnect(path)
 	{
 	  try {
 
-//            var rs = trans.getTables("%","%","%","");
             var rs = trans.getTables("%","%","%","TABLE,VIEW,SYSTEM TABLE,SYSTEM VIEW");
             var md = rs.metaData;
             var rows = rs.rows;
@@ -794,7 +786,7 @@ function FillQuadBox(list, qdata) {
         '<xul:listheader minwidth="80" fixed="false" hidden="'+c_vis[1]+'" width="50" label="EntityID"/>'+
         '<xul:listheader minwidth="80" fixed="false" hidden="'+c_vis[2]+'" width="50" label="Attribute"/>'+
         '<xul:listheader minwidth="80" fixed="false" hidden="'+c_vis[3]+'" width="50" label="Value"/>'+
-        '<xul:listheader minwidth="80" fixed="false" hidden="'+c_vis[4]+'" width="50" label="TableName"/>'+
+        '<xul:listheader minwidth="80" fixed="false" hidden="'+c_vis[4]+'" width="60" label="TableName"/>'+
       '</xul:listhead>');
 
     var nBody = ample.createElementNS(sXULNS, "xul:listbody");
@@ -823,8 +815,7 @@ function FillQuadBox(list, qdata) {
         cw[0] = (cw[0]<col_val.length?col_val.length:cw[0]);
 
       //EntityID
-//        col_val = xmlencode(q.obj_id_tbl+":"+q.obj_id_key+":record");
-        col_val = q.obj_id_tbl+":"+q.obj_id_key+":record";
+        col_val = q.obj_id_tbl+":record"+":"+q.obj_id_key;
         nData = ample.createElementNS(sXULNS, "xul:listcell");
         nData.setAttribute("label", "urn:"+col_val);
         nData.setAttribute("hidden",c_vis[1]);
@@ -837,12 +828,10 @@ function FillQuadBox(list, qdata) {
         
       //Attribute
         if (q.k_type &8){
-//          col_val = xmlencode("rel_from:"+q.cname);
           col_val = "rel_from:"+q.cname;
         }
         else
         if (q.k_type &2) {
-//          col_val = xmlencode("rel_to:"+q.cname);
           col_val = "rel_to:"+q.cname;
         }
         else
@@ -850,7 +839,6 @@ function FillQuadBox(list, qdata) {
           col_val = "instanceOf";
         }
         else{
-//          col_val = xmlencode(q.cname);
           col_val = q.cname?q.cname:"";
         }
 
@@ -875,24 +863,20 @@ function FillQuadBox(list, qdata) {
         {
           if (q.k_type & 8) {
             var rel = q.rel_tbl.split("#");
-//            col_val = xmlencode(rel[0]+":"+rel[1]+":"+q.cval);
             col_val = rel[0]+":"+rel[1]+":"+q.cval;
           }
           else if (q.k_type & 2) {
             var rel = q.rel_tbl.split("#");
-//            col_val = xmlencode(rel[0]+":"+rel[1]+":"+q.cval);
             col_val = rel[0]+":"+rel[1]+":"+q.cval;
           }
           else if (q.k_type & 4) {
-//            col_val = xmlencode(q.tbl+":"+key_val+":table");
-            col_val = q.tbl+":"+key_val+":table";
+//            col_val = q.tbl+":"+key_val+":table";
+            col_val = q.tbl+":table";
           }
           else if (q.k_type & 1) {
-//            col_val = xmlencode(q.tbl+":"+key_val+":"+q.cval);
             col_val = q.tbl+":"+key_val+":"+q.cval;
           }
           else {
-//            col_val = xmlencode(q.tbl+":"+q.cname+":"+q.cval);
             col_val = q.tbl+":"+q.cname+":"+q.cval;
           }
           
@@ -903,7 +887,6 @@ function FillQuadBox(list, qdata) {
         } 
         else
         {
-//          col_val = xmlencode(q.cval);
           col_val = q.cval?q.cval:"";
           if ((col_val.indexOf("http://")==0 || col_val.indexOf("https://")==0 || col_val.indexOf("file://")==0))
           {
@@ -920,16 +903,14 @@ function FillQuadBox(list, qdata) {
         cw[3] = (cw[3]<col_val.length?col_val.length:cw[3]);
 
       //TableName
-        if (q.k_type & 8){
-//          col_val = xmlencode(q.rel_tbl.split("#")[0]);
+        if (q.k_type & 8)
           col_val = q.rel_tbl.split("#")[0];
-        }
-        else {
-//          col_val = xmlencode(q.tbl);
+        else 
           col_val = q.tbl?q.tbl:"";
-        }
+        col_val = (col_val.length>0)?"urn:Document:"+col_val : col_val;
+
         nData = ample.createElementNS(sXULNS, "xul:listcell");
-        nData.setAttribute("label", "urn:"+col_val);
+        nData.setAttribute("label", col_val);
         nData.setAttribute("hidden",c_vis[4]);
         nData.setAttribute("class","linkInt");
         nData.setAttribute("id", list+"#"+escape(id)+"#3");
@@ -995,8 +976,10 @@ function Fill_PKeyList(list, rs, fkeys_lst) {
 
 
       nData = ample.createElementNS(sXULNS, "xul:listcell");
+//      val = fkeys_lst[i].cat+":"+fkeys_lst[i].sch+":"+
+//            fkeys_lst[i].ptbl+":"+fkeys_lst[i].pcol+":record";
       val = fkeys_lst[i].cat+":"+fkeys_lst[i].sch+":"+
-            fkeys_lst[i].ptbl+":"+fkeys_lst[i].pcol+":record";
+            fkeys_lst[i].ptbl+":record"+":"+fkeys_lst[i].pcol;
       var _id = list+"#"+escape(fkeys_lst[i].cat)+":"+escape(fkeys_lst[i].sch)+"#"+
                  escape(fkeys_lst[i].ptbl)+":"+escape(fkeys_lst[i].pcol)+"#"+
                  escape(fkeys_lst[i].ftbl)+":"+escape(fkeys_lst[i].fcol);
@@ -1013,7 +996,6 @@ function Fill_PKeyList(list, rs, fkeys_lst) {
 
         var nData = ample.createElementNS(sXULNS, "xul:listcell");
         var r_val = row[md.getColumnName(j)];
-//        var val = xmlencode(r_val);
         var val = r_val?r_val:"";
         cw[j+2-gPKEY_INIT_COL] = (cw[j+2-gPKEY_INIT_COL]<val.length?val.length:cw[j+2-gPKEY_INIT_COL]);
 
@@ -1113,8 +1095,10 @@ function Fill_FKeyList(list, rs, fkeys_lst) {
 
 
       nData = ample.createElementNS(sXULNS, "xul:listcell");
+//      val = fkeys_lst[i].cat+":"+fkeys_lst[i].sch+":"+
+//            fkeys_lst[i].ptbl+":"+fkeys_lst[i].pcol+":record";
       val = fkeys_lst[i].cat+":"+fkeys_lst[i].sch+":"+
-            fkeys_lst[i].ptbl+":"+fkeys_lst[i].pcol+":record";
+            fkeys_lst[i].ptbl+":record"+":"+fkeys_lst[i].pcol;
       var _id = list+"#"+escape(fkeys_lst[i].cat)+":"+escape(fkeys_lst[i].sch)+"#"+
                  escape(fkeys_lst[i].ftbl)+":"+escape(fkeys_lst[i].fcol)+"#"+
                  escape(fkeys_lst[i].ptbl)+":"+escape(fkeys_lst[i].pcol);
@@ -1128,8 +1112,10 @@ function Fill_FKeyList(list, rs, fkeys_lst) {
 
 
       nData = ample.createElementNS(sXULNS, "xul:listcell");
+//      val = fkeys_lst[i].cat+":"+fkeys_lst[i].sch+":"+
+//            fkeys_lst[i].ftbl+":"+fkeys_lst[i].fcol+":record";
       val = fkeys_lst[i].cat+":"+fkeys_lst[i].sch+":"+
-            fkeys_lst[i].ftbl+":"+fkeys_lst[i].fcol+":record";
+            fkeys_lst[i].ftbl+":record"+":"+fkeys_lst[i].fcol;
       var _id = list+"#"+escape(fkeys_lst[i].cat)+":"+escape(fkeys_lst[i].sch)+"#"+
                  escape(fkeys_lst[i].ptbl)+":"+escape(fkeys_lst[i].pcol)+"#"+
                  escape(fkeys_lst[i].ftbl)+":"+escape(fkeys_lst[i].fcol);
@@ -1146,7 +1132,6 @@ function Fill_FKeyList(list, rs, fkeys_lst) {
 
         var nData = ample.createElementNS(sXULNS, "xul:listcell");
         var r_val = row[md.getColumnName(j)];
-//        var val = xmlencode(r_val);
         var val = r_val?r_val:"";
         cw[j+3-gFKEY_INIT_COL] = (cw[j+3-gFKEY_INIT_COL]<val.length?val.length:cw[j+3-gFKEY_INIT_COL]);
 
@@ -1247,8 +1232,10 @@ function Fill_RefsList(list, rs, fkeys_lst) {
 
 
       nData = ample.createElementNS(sXULNS, "xul:listcell");
+//      val = fkeys_lst[i].cat+":"+fkeys_lst[i].sch+":"+
+//            fkeys_lst[i].ftbl+":"+fkeys_lst[i].fcol+":record";
       val = fkeys_lst[i].cat+":"+fkeys_lst[i].sch+":"+
-            fkeys_lst[i].ftbl+":"+fkeys_lst[i].fcol+":record";
+            fkeys_lst[i].ftbl+":record"+":"+fkeys_lst[i].fcol;
       var _id = list+"#"+escape(fkeys_lst[i].cat)+":"+escape(fkeys_lst[i].sch)+"#"+
                  escape(fkeys_lst[i].ptbl)+":"+escape(fkeys_lst[i].pcol)+"#"+
                  escape(fkeys_lst[i].ftbl)+":"+escape(fkeys_lst[i].fcol);
@@ -1262,8 +1249,10 @@ function Fill_RefsList(list, rs, fkeys_lst) {
 
 
       nData = ample.createElementNS(sXULNS, "xul:listcell");
+//      val = fkeys_lst[i].cat+":"+fkeys_lst[i].sch+":"+
+//            fkeys_lst[i].ptbl+":"+fkeys_lst[i].pcol+":record";
       val = fkeys_lst[i].cat+":"+fkeys_lst[i].sch+":"+
-            fkeys_lst[i].ptbl+":"+fkeys_lst[i].pcol+":record";
+            fkeys_lst[i].ptbl+":record"+":"+fkeys_lst[i].pcol;
       var _id = list+"#"+escape(fkeys_lst[i].cat)+":"+escape(fkeys_lst[i].sch)+"#"+
                  escape(fkeys_lst[i].ftbl)+":"+escape(fkeys_lst[i].fcol)+"#"+
                  escape(fkeys_lst[i].ptbl)+":"+escape(fkeys_lst[i].pcol);
@@ -1280,7 +1269,6 @@ function Fill_RefsList(list, rs, fkeys_lst) {
 
         var nData = ample.createElementNS(sXULNS, "xul:listcell");
         var r_val = row[md.getColumnName(j)];
-//        var val = xmlencode(r_val);
         var val = r_val?r_val:"";
         cw[j+3-gFKEY_INIT_COL] = (cw[j+3-gFKEY_INIT_COL]<val.length?val.length:cw[j+3-gFKEY_INIT_COL]);
 
@@ -2332,7 +2320,7 @@ function execSparqlLinkClick(lstbox, uri) {
   updatePermalink(null, lstbox, {sql: "#"+uri});
 
   if (lstbox == "execTable") { 
-      var sql = "sparql describe <"+uri+"> LIMIT 100";
+      var sql = "sparql define sql:describe-mode \"CBD\" describe <"+uri+"> LIMIT 100";
       ample.query("#txtSqlStatement").attr("value", sql);
       clickExecQuery();
 

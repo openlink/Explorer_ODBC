@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<RDF xmlns="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:em="http://www.mozilla.org/2004/em-rdf#">
+
+  <Description about="urn:mozilla:install-manifest">
+  
+    <em:id>iodbcstorage@openlinksw.com</em:id>
+    <em:name>OpenLink HTML5 WebDB-to-ODBC Bridge</em:name>
+    <em:version>0.3.1</em:version>
+    <em:description>Enables ODBC use by/through HTML5 WebDB Database interfaces.</em:description>
+    <em:creator>OpenLink Software 2013</em:creator>
+    <em:unpack>true</em:unpack>
+
+
+    <!-- optional items -->
+    <em:homepageURL>http://uds.openlinksw.com/</em:homepageURL>
+<!--    <em:aboutURL>chrome://webodbc/content/about.xul</em:aboutURL> -->
+    <em:iconURL>chrome://webodbc/content/img/iodbc.png</em:iconURL>
+
+    <!-- Firefox -->
+    <em:targetApplication>
+      <Description>
+        <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
+        <em:minVersion>4.0</em:minVersion>
+        <em:maxVersion>20.*</em:maxVersion>
+      </Description>
+    </em:targetApplication>
+
+    <em:targetApplication>
+      <Description>
+        <em:id>toolkit@mozilla.org</em:id>
+        <em:minVersion>1.9.0</em:minVersion>
+        <em:maxVersion>*</em:maxVersion>
+      </Description>
+    </em:targetApplication>
+
+<!--    <em:targetPlatform>WINNT_x86-msvc</em:targetPlatform> -->
+    <em:targetPlatform>WINNT</em:targetPlatform>
+    <em:targetPlatform>Darwin</em:targetPlatform>
+    <em:targetPlatform>Linux</em:targetPlatform>
+<!--    <em:targetPlatform>Linux_x86-gcc3</em:targetPlatform> -->
+<!--    <em:targetPlatform>Darwin_x86-gcc3</em:targetPlatform>
+    <em:targetPlatform>Darwin_ppc-gcc3</em:targetPlatform>
+    <em:targetPlatform>Darwin_x86_64-gcc3</em:targetPlatform>
+-->
+
+  </Description>
+
+</RDF>

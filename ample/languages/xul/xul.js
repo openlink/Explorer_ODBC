@@ -897,7 +897,7 @@ cXULWindowElement.modalWindow	= null;
 
 cXULWindowElement.prototype.$mapAttribute	= function(sName, sValue) {
 	if (sName == "title")
-		this.$getContainer("title").innerHTML	= sValue || '';
+		this.$getContainer("title").innerHTML	= ample.$encodeXMLCharacters(sValue || '');
 	else
 		cXULElement.prototype.$mapAttribute.call(this, sName, sValue);
 };
@@ -1531,30 +1531,30 @@ cXULElement_button.prototype.$mapAttribute	= function(sName, sValue) {
 		this.$getContainer().disabled	= sValue == "true";
 	else
 	if (sName == "label")
-		this.$getContainer().innerHTML	=(this.attributes["image"] ? '<img src="' + this.attributes["image"] + '" align="absmiddle" /> ' :'') + (sValue || '');
+		this.$getContainer().innerHTML	=(this.hasAttribute("image") ? '<img src="' + ample.$encodeXMLCharacters(this.getAttribute("image")) + '" align="absmiddle" /> ' :'') + ample.$encodeXMLCharacters(sValue || '');
 	else
 	if (sName == "image")
-		this.$getContainer().innerHTML	=(sValue ? '<img src="' + sValue + '" align="absmiddle" /> ' :'') + (this.attributes["label"] || '');
+		this.$getContainer().innerHTML	=(sValue ? '<img src="' + ample.$encodeXMLCharacters(sValue) + '" align="absmiddle" /> ' :'') + ample.$encodeXMLCharacters(this.getAttribute("label") || '');
 	else
 		cXULElement.prototype.$mapAttribute.call(this, sName, sValue);
 };
 
 cXULElement_button.prototype.$getTagOpen	= function() {
-	var sHtml	= '<button class="xul-button' + (this.attributes["class"] ? " " + this.attributes["class"] : "") + '"';
+	var sHtml	= '<button class="xul-button' + (this.hasAttribute("class") ? " " + this.getAttribute("class") : "") + '"';
 	if (!this.$isAccessible())
 		sHtml  += ' disabled="true"';
 	sHtml  += ' style="';
-	if (this.attributes["width"])
-		sHtml  += 'width:'+this.attributes["width"]+';';
-	if (this.attributes["height"])
-		sHtml  += 'height:'+this.attributes["height"]+';';
-	if (this.attributes["hidden"] == "true")
+	if (this.hasAttribute("width"))
+		sHtml  += 'width:'+this.getAttribute("width")+';';
+	if (this.hasAttribute("height"))
+		sHtml  += 'height:'+this.getAttribute("height")+';';
+	if (this.getAttribute("hidden") == "true")
 		sHtml  += 'display:none';
 	sHtml  += '">';
-	if (this.attributes["image"])
-		sHtml  += '<img src="' + ample.$encodeXMLCharacters(this.attributes["image"]) + '" align="absmiddle"/> ';
-	if (this.attributes["label"])
-		sHtml  += ample.$encodeXMLCharacters(this.attributes["label"]);
+	if (this.hasAttribute("image"))
+		sHtml  += '<img src="' + ample.$encodeXMLCharacters(this.getAttribute("image")) + '" align="absmiddle"/> ';
+	if (this.hasAttribute("label"))
+		sHtml  += ample.$encodeXMLCharacters(this.getAttribute("label"));
 
 	return sHtml;
 };
@@ -1572,7 +1572,7 @@ cXULElement_caption.prototype.viewType	= cXULElement.VIEW_TYPE_VIRTUAL;
 
 cXULElement_caption.handlers	= {
 	"DOMNodeInsertedIntoDocument":	function(oEvent) {
-		this.parentNode.$getContainer("caption").innerHTML	= (this.hasAttribute("image") ? '<img src="' + this.getAttribute("image") + '" align="absmiddle" /> ' : '')+(this.hasAttribute("label") ? this.getAttribute("label") : '');
+		this.parentNode.$getContainer("caption").innerHTML	= (this.hasAttribute("image") ? '<img src="' + ample.$encodeXMLCharacters(this.getAttribute("image")) + '" align="absmiddle" /> ' : '')+(this.hasAttribute("label") ? ample.$encodeXMLCharacters(this.getAttribute("label")) : '');
 		if (this.getAttribute("hidden") != "true")
 			this.parentNode.$getContainer("caption").style.display	= "";
 	}
@@ -1582,10 +1582,10 @@ cXULElement_caption.prototype.$mapAttribute	= function(sName, sValue) {
 		if (!(this.parentNode instanceof cXULElement_groupbox))
 		return;
 		if (sName == "label")
-		this.parentNode.$getContainer("caption").innerHTML	=(this.attributes["image"] ? '<img src="' + this.attributes["image"] + '" align="absmiddle" /> ' : '')+ (sValue || '');
+		this.parentNode.$getContainer("caption").innerHTML	=(this.hasAttribute("image") ? '<img src="' + ample.$encodeXMLCharacters(this.getAttribute("image")) + '" align="absmiddle" /> ' : '')+ ample.$encodeXMLCharacters(sValue || '');
 	else
 	if (sName == "image")
-		this.parentNode.$getContainer("caption").innerHTML	=(sValue ? '<img src="' + sValue + '" align="absmiddle" /> ' : '') + (this.attributes["label"] ? this.attributes["label"] : '');
+		this.parentNode.$getContainer("caption").innerHTML	=(sValue ? '<img src="' + ample.$encodeXMLCharacters(sValue) + '" align="absmiddle" /> ' : '') + ample.$encodeXMLCharacters(this.getAttribute("label") || '');
 	else
 	if (sName == "hidden")
 		this.parentNode.$getContainer("caption").style.display	= sValue == "true" ? "none" : "";
@@ -1637,7 +1637,7 @@ cXULElement_checkbox.prototype.$mapAttribute	= function(sName, sValue) {
 		this.$setPseudoClass("checked", sValue == "true");
 	else
 	if (sName == "label")
-		this.$getContainer("label").innerHTML	= sValue || '';
+		this.$getContainer("label").innerHTML	= ample.$encodeXMLCharacters(sValue || '');
 	else
 		cXULInputElement.prototype.$mapAttribute.call(this, sName, sValue);
 };
@@ -2550,7 +2550,7 @@ cXULElement_description.prototype	= new cXULElement("description");
 
 cXULElement_description.prototype.$mapAttribute	= function(sName, sValue) {
 	if (sName == "value")
-		this.$getContainer().innerHTML	= sValue || '';
+		this.$getContainer().innerHTML	= ample.$encodeXMLCharacters(sValue || '');
 	else
 		cXULElement.prototype.$mapAttribute.call(this, sName, sValue);
 };
@@ -2783,12 +2783,12 @@ cXULElement_dialogheader.handlers	= {
 cXULElement_dialogheader.prototype.$mapAttribute	= function(sName, sValue) {
 	if (sName == "title") {
 		if (this.parentNode instanceof cXULElement_dialog)
-			this.parentNode.$getContainer("label").innerHTML	= sValue || " ";
+			this.parentNode.$getContainer("label").innerHTML	= ample.$encodeXMLCharacters(sValue || " ");
 	}
 	else
 	if (sName == "description") {
 		if (this.parentNode instanceof cXULElement_dialog)
-			this.parentNode.$getContainer("description").innerHTML = sValue || " ";
+			this.parentNode.$getContainer("description").innerHTML = ample.$encodeXMLCharacters(sValue || " ");
 	}
 	else
 		cXULElement.prototype.$mapAttribute.call(this, sName, sValue);
@@ -3532,7 +3532,7 @@ cXULElement_label.handlers	= {
 
 cXULElement_label.prototype.$mapAttribute	= function(sName, sValue) {
 	if (sName == "value")
-		this.$getContainer().innerHTML	= sValue || '';
+		this.$getContainer().innerHTML	= ample.$encodeXMLCharacters(sValue || '');
 	else
 		cXULElement.prototype.$mapAttribute.call(this, sName, sValue);
 };
@@ -3736,21 +3736,21 @@ cXULElement_listcell.prototype	= new cXULElement("listcell");
 
 cXULElement_listcell.prototype.$mapAttribute	= function(sName, sValue) {
 	if (sName == "label")
-		this.$getContainer("gateway").innerHTML	=(this.attributes["src"] ? '<img src="' + this.attributes["src"] + '" align="absmiddle" /> ' :'') + (sValue || '');
+		this.$getContainer("gateway").innerHTML	=(this.hasAttribute("src") ? '<img src="' + ample.$encodeXMLCharacters(this.getAttribute("src")) + '" align="absmiddle" /> ' :'') + ample.$encodeXMLCharacters(sValue || '');
 	else
 	if (sName == "src")
-		this.$getContainer("gateway").innerHTML	=(sValue ? '<img src="' + sValue + '" align="absmiddle" /> ' :'') + (this.attributes["label"] || '');
+		this.$getContainer("gateway").innerHTML	=(sValue ? '<img src="' + ample.$encodeXMLCharacters(sValue) + '" align="absmiddle" /> ' :'') + ample.$encodeXMLCharacters(this.getAttribute("label") || '');
 	else
 		cXULElement.prototype.$mapAttribute.call(this, sName, sValue);
 };
 
 cXULElement_listcell.prototype.$getTagOpen	= function() {
 	var oHeader	= this.parentNode.parentNode.parentNode.firstChild.childNodes[this.parentNode.childNodes.$indexOf(this)];
-	var sHtml	= '<td class="xul-listcell' + (this.attributes["class"] ? " " + this.attributes["class"] : "") + '"' + (oHeader && oHeader.attributes["hidden"] == "true" ? ' style="display:none;"' : '') + '><div class="xul-listcell--box" style="position:relative;width:100%;"><div class="xul-listcell--label xul-listcell--gateway" style="position:absolute;width:100%;overflow:hidden;">';
-	if (this.attributes["image"])
-		sHtml	+= '<img src="' + ample.$encodeXMLCharacters(this.attributes["image"]) + '" align="absmiddle"/> ';
-	if (this.attributes["label"])
-		sHtml	+= ample.$encodeXMLCharacters(this.attributes["label"]);
+	var sHtml	= '<td class="xul-listcell' + (this.hasAttribute("class") ? " " + this.getAttribute("class") : "") + '"' + (oHeader && oHeader.getAttribute("hidden") == "true" ? ' style="display:none;"' : '') + '><div class="xul-listcell--box" style="position:relative;width:100%;"><div class="xul-listcell--label xul-listcell--gateway" style="position:absolute;width:100%;overflow:hidden;">';
+	if (this.hasAttribute("image"))
+		sHtml	+= '<img src="' + ample.$encodeXMLCharacters(this.getAttribute("image")) + '" align="absmiddle"/> ';
+	if (this.hasAttribute("label"))
+		sHtml	+= ample.$encodeXMLCharacters(this.getAttribute("label"));
 
 	return sHtml;
 };
@@ -3973,7 +3973,7 @@ cXULElement_listheader.prototype.$mapAttribute	= function(sName, sValue) {
 	}
 	else
 	if (sName == "label")
-		this.$getContainer("label").innerHTML	= sValue || '';
+		this.$getContainer("label").innerHTML	= ample.$encodeXMLCharacters(sValue || '');
 	else
 	if (sName == "hidden") {
 		var nCell	= this.parentNode.items.$indexOf(this);
@@ -4145,7 +4145,7 @@ cXULElement_menu.prototype.$mapAttribute	= function(sName, sValue) {
 	}
 	else
 	if (sName == "label")
-		this.$getContainer("label").innerHTML	= sValue;
+		this.$getContainer("label").innerHTML	= ample.$encodeXMLCharacters(sValue || '');
 	else
 	if (sName == "image") {
 		if (this.parentNode instanceof cXULElement_menupopup)
@@ -4325,7 +4325,7 @@ cXULElement_menuitem.prototype.$mapAttribute	= function(sName, sValue) {
 				if (document.namespaces)
 			oCell.innerText	= sValue || '';
 		else
-			oCell.innerHTML	= sValue || '';
+			oCell.innerHTML	= ample.$encodeXMLCharacters(sValue || '');
 	}
 	else
 	if (sName == "image")
@@ -5025,7 +5025,7 @@ cXULElement_radio.prototype.$mapAttribute	= function(sName, sValue) {
 		this.$setPseudoClass("disabled", sValue == "true");
 	else
 	if (sName == "label")
-		this.$getContainer("label").innerHTML	= sValue || '';
+		this.$getContainer("label").innerHTML	= ample.$encodeXMLCharacters(sValue || '');
 	else
 	if (sName == "selected")
 		this.$setPseudoClass("selected", sValue == "true");
@@ -5615,21 +5615,21 @@ cXULElement_statusbarpanel.attributes.align	= "center";
 
 cXULElement_statusbarpanel.prototype.$mapAttribute	= function(sName, sValue) {
 	if (sName == "label")
-		this.$getContainer().innerHTML	=(this.attributes["image"] ? '<img src="' + this.attributes["image"] + '" align="absmiddle"/>' : '') + (sValue || '');
+		this.$getContainer().innerHTML	=(this.hasAttribute("image") ? '<img src="' + ample.$encodeXMLCharacters(this.getAttribute("image")) + '" align="absmiddle"/>' : '') + ample.$encodeXMLCharacters(sValue || '');
 	else
 	if (sName == "image")
-		this.$getContainer().innerHTML	=(sValue ? '<img src="' + sValue + '" align="absmiddle"/>' : '') + (this.attributes["label"] || '');
+		this.$getContainer().innerHTML	=(sValue ? '<img src="' + ample.$encodeXMLCharacters(sValue) + '" align="absmiddle"/>' : '') + ample.$encodeXMLCharacters(this.getAttribute("label") || '');
 	else
 		cXULElement.prototype.$mapAttribute.call(this, sName, sValue);
 };
 
 cXULElement_statusbarpanel.prototype.$getTagOpen	= function() {
-	var sHtml	= '<div class="xul-statusbarpanel' + (this.attributes["class"] ? " " + this.attributes["class"] : "") + '">';
-	if (this.attributes["image"])
-		sHtml	+= '<img src="' + ample.$encodeXMLCharacters(this.attributes["image"]) + '" align="absmiddle"/>';
+	var sHtml	= '<div class="xul-statusbarpanel' + (this.hasAttribute("class") ? " " + this.getAttribute("class") : "") + '">';
+	if (this.hasAttribute("image"))
+		sHtml	+= '<img src="' + ample.$encodeXMLCharacters(this.getAttribute("image")) + '" align="absmiddle"/>';
 	else
-	if (this.attributes["label"])
-		sHtml	+= ample.$encodeXMLCharacters(this.attributes["label"]);
+	if (this.hasAttribute("label"))
+		sHtml	+= ample.$encodeXMLCharacters(this.getAttribute("label"));
 	return sHtml;
 };
 
@@ -5666,21 +5666,21 @@ cXULElement_tab.prototype.$mapAttribute	= function(sName, sValue) {
 		this.$setPseudoClass("selected", sValue == "true");
 	else
 	if (sName == "label")
-		this.$getContainer("gateway").innerHTML	=(this.attributes["image"] ? '<img src="' + this.attributes["image"] + '" align="absmiddle" /> ' :'') + (sValue || '');
+		this.$getContainer("gateway").innerHTML	=(this.hasAttribute("image") ? '<img src="' + ample.$encodeXMLCharacters(this.getAttribute("image")) + '" align="absmiddle" /> ' :'') + ample.$encodeXMLCharacters(sValue || '');
 	else
 	if (sName == "image")
-		this.$getContainer("gateway").innerHTML	=(sValue ? '<img src="' + sValue + '" align="absmiddle" /> ' :'') + (this.attributes["label"] || '');
+		this.$getContainer("gateway").innerHTML	=(sValue ? '<img src="' + ample.$encodeXMLCharacters(sValue) + '" align="absmiddle" /> ' :'') + ample.$encodeXMLCharacters(this.getAttribute("label") || '');
 	else
 		cXULElement.prototype.$mapAttribute.call(this, sName, sValue);
 };
 
 cXULElement_tab.prototype.$getTagOpen	= function() {
-	return '<div class="xul-tab' + (!this.$isAccessible() ? " xul-tab_disabled" : "") +(this.attributes["class"] ? " " + this.attributes["class"] : "") + '">\
+	return '<div class="xul-tab' + (!this.$isAccessible() ? " xul-tab_disabled" : "") +(this.hasAttribute("class") ? " " + this.getAttribute("class") : "") + '">\
 				<div class="xul-tab--before" style="float:left;height:100%"></div>\
 				<div class="xul-tab--after" style="float:right;height:100%"></div>\
 				<div class="xul-tab--gateway">'+
-					(this.attributes["image"] ? '<img src="' + ample.$encodeXMLCharacters(this.attributes["image"]) + '" border="0" align="absmiddle"/> ' : '')+
-					(this.attributes["label"] ? ample.$encodeXMLCharacters(this.attributes["label"]) : '');
+					(this.hasAttribute("image") ? '<img src="' + ample.$encodeXMLCharacters(this.getAttribute("image")) + '" border="0" align="absmiddle"/> ' : '')+
+					(this.hasAttribute("label") ? ample.$encodeXMLCharacters(this.getAttribute("label")) : '');
 };
 
 cXULElement_tab.prototype.$getTagClose	= function() {
@@ -5965,7 +5965,7 @@ cXULElement_textbox.prototype.$mapAttribute	= function(sName, sValue) {
 		this.$getContainer("input").readOnly	= sValue == "true";
 	else
 	if (sName == "placeholder")
-		this.$getContainer("placeholder").innerHTML	= sValue || '';
+		this.$getContainer("placeholder").innerHTML	= ample.$encodeXMLCharacters(sValue || '');
 	else
 	if (sName == "type") {
 			}
@@ -6326,10 +6326,10 @@ cXULElement_toolbarbutton.prototype.$mapAttribute	= function(sName, sValue) {
 	}
 	else
 	if (sName == "label")
-		this.$getContainer("label").innerHTML	=(this.attributes["image"] ? '<img src="' + this.attributes["image"] + '" align="absmiddle" />' : '') + ' ' + (sValue || '');
+		this.$getContainer("label").innerHTML	=(this.hasAttribute("image") ? '<img src="' + ample.$encodeXMLCharacters(this.getAttribute("image")) + '" align="absmiddle" />' : '') + ' ' + ample.$encodeXMLCharacters(sValue || '');
 	else
 	if (sName == "image")
-		this.$getContainer("label").innerHTML	=(sValue ? '<img src="' + sValue + '" align="absmiddle" />' : '') + ' ' + (this.attributes["label"] || '');
+		this.$getContainer("label").innerHTML	=(sValue ? '<img src="' + ample.$encodeXMLCharacters(sValue) + '" align="absmiddle" />' : '') + ' ' + ample.$encodeXMLCharacters(this.getAttribute("label") || '');
 	else
 		cXULElement.prototype.$mapAttribute.call(this, sName, sValue);
 };
@@ -6339,7 +6339,7 @@ cXULElement_toolbarbutton.prototype.$getTagOpen	= function() {
 	return '<table cellpadding="0" cellspacing="0" border="0" class="xul-toolbarbutton' +
 				(!this.$isAccessible() ? " xul-toolbarbutton_disabled" : "") +
 				((sType == "radio" || sType == "checkbox") && this.getAttribute("checked") == "true" ? " xul-toolbarbutton_checked" : "") +
-				(this.attributes["class"] ? " " + this.attributes["class"] : "") + '">\
+				(this.hasAttribute("class") ? " " + this.getAttribute("class") : "") + '">\
 				<tbody>\
 					<tr height="3">\
 						<td width="3" rowspan="3" class="xul-toolbarbutton-left"><div style="width:3px"/></td>\
@@ -6457,7 +6457,7 @@ var cXULElement_tooltip_pane	= function(){};
 cXULElement_tooltip_pane.prototype	= new cXULPopupElement("tooltip-pane");
 
 cXULElement_tooltip_pane.prototype.setText	= function(sValue) {
-	this.$getContainer("gateway").innerHTML	= sValue;
+	this.$getContainer("gateway").innerHTML	= ample.$encodeXMLCharacters(sValue);
 };
 
 cXULElement_tooltip_pane.prototype.$getTagOpen	= function() {
@@ -6782,20 +6782,20 @@ cXULElement_treecell.handlers	= {
 
 cXULElement_treecell.prototype.$mapAttribute	= function(sName, sValue) {
 	if (sName == "label")
-		this.$getContainer("gateway").innerHTML	=(this.attributes["src"] ? '<img src="' + this.attributes["src"] + '" align="absmiddle" /> ' :'') + (sValue || '');
+		this.$getContainer("gateway").innerHTML	=(this.hasAttribute("src") ? '<img src="' + ample.$encodeXMLCharacters(this.getAttribute("src")) + '" align="absmiddle" /> ' :'') + ample.$encodeXMLCharacters(sValue || '');
 	else
 	if (sName == "src")
-		this.$getContainer("gateway").innerHTML	=(sValue ? '<img src="' + sValue + '" align="absmiddle" /> ' :'') + (this.attributes["label"] || '');
+		this.$getContainer("gateway").innerHTML	=(sValue ? '<img src="' + ample.$encodeXMLCharacters(sValue) + '" align="absmiddle" /> ' :'') + ample.$encodeXMLCharacters(this.getAttribute("label") || '');
 	else
 	if (sName == "editable") {
 		if (sValue == "true") {
 			var oElementDOM	= this.$getContainer("gateway");
 			oElementDOM.innerHTML	= '<input style="border:none; margin:0px; margin-left: 2px; padding-left: 2px; padding-top:1px; width:100px;" onselectstart="event.cancelBubble=true;" onchange="ample.$instance(this).setAttribute(\'label\', this.value)" onblur="this.onchange();" onkeydown="if (event.keyCode == 13) this.onchange(); else if (event.keyCode == 27) ample.$instance(this).setAttribute(\'editable\', \'false\')"/>';
 			oElementDOM.firstChild.focus();
-			oElementDOM.firstChild.value	= this.attributes["label"] || '';
+			oElementDOM.firstChild.value	= this.getAttribute("label") || '';
 		}
 		else
-			this.$mapAttribute("label", this.attributes["label"]);
+			this.$mapAttribute("label", this.getAttribute("label"));
 	}
 	else
 		cXULElement.prototype.$mapAttribute.call(this, sName, sValue);
@@ -6805,7 +6805,7 @@ cXULElement_treecell.prototype.$getTagOpen	= function() {
 	var oChildren	= this.parentNode.parentNode.parentNode,
 		oHead	= oChildren && oChildren.tree ? oChildren.tree.head : null,
 		nCellIndex	= this.parentNode.childNodes.$indexOf(this);
-	var sHtml	= '<td class="xul-treecell' + (this.attributes["class"] ? " " + this.attributes["class"] : "") + '"' + (oHead && oHead.childNodes[nCellIndex] && oHead.childNodes[nCellIndex].attributes["hidden"] == "true" ? ' style="display:none"' : '') + '>';
+	var sHtml	= '<td class="xul-treecell' + (this.hasAttribute("class") ? " " + this.getAttribute("class") : "") + '"' + (oHead && oHead.childNodes[nCellIndex] && oHead.childNodes[nCellIndex].getAttribute("hidden") == "true" ? ' style="display:none"' : '') + '>';
 	sHtml	+= '<div class="xul-treecell--box" style="position:relative;width:100%;"><div class="xul-treecell--label" style="position:absolute;width:100%;overflow:hidden;">';
 	if (oHead && oHead._getPrimaryColIndex() == nCellIndex) {
 		var oElementCurrent	= this;
@@ -6817,11 +6817,11 @@ cXULElement_treecell.prototype.$getTagOpen	= function() {
 				break;
 		} while(oElementCurrent = oElementCurrent.parentNode);
 	}
-
 	sHtml	+= '<div class="xul-treecell--gateway" style="width:100%">';
-	if (this.attributes["src"])
-		sHtml	+= '<img src="' + ample.$encodeXMLCharacters(this.attributes["src"]) + '" align="absmiddle"/> ';
-	sHtml	+= this.attributes["label"] ? ample.$encodeXMLCharacters(this.attributes["label"]) : '';
+	if (this.hasAttribute("src"))
+		sHtml	+= '<img src="' + ample.$encodeXMLCharacters(this.getAttribute("src")) + '" align="absmiddle"/> ';
+	if (this.hasAttribute("label"))
+		sHtml	+= ample.$encodeXMLCharacters(this.getAttribute("label"));
 
 	return sHtml;
 };
@@ -6958,7 +6958,7 @@ cXULElement_treecol.handlers	= {
 	},
 	"DOMAttrModified":	function(oEvent) {
 		if (oEvent.target == this) {
-			if (oEvent.attrName ==  "hidden") {
+			if (oEvent.attrName ==  "hidden" && this.parentNode) {
 				var nCell	= this.parentNode.items.$indexOf(this);
 				for (var nIndex = 0, aItems = this.parentNode.parentNode.items; nIndex < aItems.length; nIndex++)
 					if (aItems[nIndex].row)
@@ -6975,7 +6975,7 @@ cXULElement_treecol.prototype.$mapAttribute	= function(sName, sValue) {
 	}
 	else
 	if (sName == "label")
-		this.$getContainer("label").innerHTML	= sValue || '';
+		this.$getContainer("label").innerHTML	= ample.$encodeXMLCharacters(sValue || '');
 	else
 	if (sName == "hidden") {
 		var nCell	= this.parentNode.items.$indexOf(this);
@@ -7440,7 +7440,7 @@ cXULElement_wizard.prototype.goTo	= function(sId) {
 
 cXULElement_wizard.prototype.getPageById	= function(sId) {
 	for (var nIndex = 0; nIndex < this.wizardPages.length; nIndex++)
-		if (this.wizardPages[nIndex].attributes["pageid"] == sId)
+		if (this.wizardPages[nIndex].getAttribute("pageid") == sId)
 			return this.wizardPages[nIndex];
 
 	return null;
@@ -7499,9 +7499,9 @@ cXULElement_wizard.goTo	= function(oElement, oPage) {
 
 		oPage.$getContainer().style.display	= "";
 
-		oElement.$getContainer("label").innerHTML	= oPage.attributes["label"] || " ";
-	oElement.$getContainer("description").innerHTML	= oPage.attributes["description"] || " ";
-	oElement.$getContainer("header").className	= "xul-wizardheader xul-wizard--header " + (oPage.attributes["class"] || "");
+		oElement.$getContainer("label").innerHTML	= ample.$encodeXMLCharacters(oPage.getAttribute("label") || " ");
+	oElement.$getContainer("description").innerHTML	= ample.$encodeXMLCharacters(oPage.getAttribute("description") || " ");
+	oElement.$getContainer("header").className	= "xul-wizardheader xul-wizard--header " + (oPage.getAttribute("class") || "");
 
 		var bNext	= cXULElement_wizard.getNextPage(oElement, oPage) != null,			bPrev	= cXULElement_wizard.getPrevPage(oElement, oPage) != null;		oElement.buttons["back"].setAttribute("disabled", String(!bPrev || oElement.getAttribute("canRewind") == "false"));
 	oElement.buttons["next"].setAttribute("disabled", String(oElement.getAttribute("canAdvance") == "false"));
@@ -7512,10 +7512,10 @@ cXULElement_wizard.goTo	= function(oElement, oPage) {
 };
 
 cXULElement_wizard.getPrevPage	= function(oElement, oPage) {
-	var sId	= oPage.attributes["pageid"];
+	var sId	= oPage.getAttribute("pageid");
 	if (sId)
 		for (var oNode = oElement.lastChild; oNode; oNode = oNode.previousSibling)
-			if (oNode instanceof cXULElement_wizardpage && oNode.attributes["next"] == sId)
+			if (oNode instanceof cXULElement_wizardpage && oNode.getAttribute("next") == sId)
 				return oNode;
 	while (oPage = oPage.previousSibling)
 		if (oPage instanceof cXULElement_wizardpage)
@@ -7524,10 +7524,10 @@ cXULElement_wizard.getPrevPage	= function(oElement, oPage) {
 };
 
 cXULElement_wizard.getNextPage	= function(oElement, oPage) {
-	var sId	= oPage.attributes["next"];
+	var sId	= oPage.getAttribute("next");
 	if (sId)
 		for (var oNode = oElement.firstChild; oNode; oNode = oNode.nextSibling)
-			if (oNode instanceof cXULElement_wizardpage && oNode.attributes["pageid"] == sId)
+			if (oNode instanceof cXULElement_wizardpage && oNode.getAttribute("pageid") == sId)
 				return oNode;
 	while (oPage = oPage.nextSibling)
 		if (oPage instanceof cXULElement_wizardpage)
@@ -7536,15 +7536,15 @@ cXULElement_wizard.getNextPage	= function(oElement, oPage) {
 };
 
 cXULElement_wizard.prototype.$getTagOpen	= function() {
-	return '<div class="xul-wizard'+(this.attributes["class"] ? " " + this.attributes["class"] : "") + '" style="' +
-				(this.attributes["width"] ? 'width:' + this.attributes["width"] + 'px;' : '') +
-				(this.attributes["height"] ? 'height:' + (this.attributes["height"] - 100) + 'px;' : '') +
-				(this.attributes["hidden"] == "true" ? 'display:none;' : '') +
-				(this.attributes["style"] ? this.attributes["style"] : '') + '">\
-				<div class="xul-wizard--head" ' +(this.attributes["hidechrome"] == "true" ? ' style="display:none"': '')+ '>\
+	return '<div class="xul-wizard'+(this.hasAttribute("class") ? " " + this.getAttribute("class") : "") + '" style="' +
+				(this.hasAttribute("width") ? 'width:' + this.getAttribute("width") + 'px;' : '') +
+				(this.hasAttribute("height") ? 'height:' + (this.getAttribute("heigh") - 100) + 'px;' : '') +
+				(this.getAttribute("hidden") == "true" ? 'display:none;' : '') +
+				(this.hasAttribute("style") ? this.getAttribute("style") : '') + '">\
+				<div class="xul-wizard--head" ' +(this.getAttribute("hidechrome") == "true" ? ' style="display:none"': '')+ '>\
 					<table cellpadding="0" cellspacing="0" border="0" width="100%">\
 						<tbody>\
-							<tr><td class="xul-wizard--title">' +(this.attributes["title"] ? ample.$encodeXMLCharacters(this.attributes["title"]) : " ")+ '</td></tr>\
+							<tr><td class="xul-wizard--title">' +(this.hasAttribute("title") ? ample.$encodeXMLCharacters(this.getAttribute("title")) : " ")+ '</td></tr>\
 						</tbody>\
 					</table>\
 				</div>\
@@ -7556,7 +7556,7 @@ cXULElement_wizard.prototype.$getTagOpen	= function() {
 cXULElement_wizard.prototype.$getTagClose	= function() {
 	return '		</div>\
 					<div class="xul-wizard--footer">\
-						<table cellpadding="0" cellspacing="0" border="0" height="100%" align="' +(this.attributes["buttonalign"] == "start" ? "left" : this.attributes["buttonalign"] == "center" ? "center" : "right")+ '">\
+						<table cellpadding="0" cellspacing="0" border="0" height="100%" align="' +(this.getAttribute("buttonalign") == "start" ? "left" : this.getAttribute("buttonalign") == "center" ? "center" : "right")+ '">\
 							<tbody>\
 								<tr>\
 									<td>' + this.buttons['back'].$getTag() + '</td>\
@@ -7601,12 +7601,12 @@ cXULElement_wizardpage.handlers	= {
 cXULElement_wizardpage.prototype.$mapAttribute	= function(sName, sValue) {
 	if (sName == "label") {
 		if (this.parentNode.currentPage == this)
-			this.parentNode.$getContainer("label").innerHTML	= sValue || '';
+			this.parentNode.$getContainer("label").innerHTML	= ample.$encodeXMLCharacters(sValue || '');
 	}
 	else
 	if (sName == "description") {
 		if (this.parentNode.currentPage == this)
-			this.parentNode.$getContainer("description").innerHTML	= sValue || '';
+			this.parentNode.$getContainer("description").innerHTML	= ample.$encodeXMLCharacters(sValue || '');
 	}
 	else
 	if (sName == "class") {
