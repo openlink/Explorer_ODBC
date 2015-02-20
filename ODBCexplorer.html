@@ -2,6 +2,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <title>ODBC explorer</title>
+    <meta http-equiv='cache-control' content='no-cache'>
+    <meta http-equiv='expires' content='0'>
+    <meta http-equiv='pragma' content='no-cache'>
+    <link rel="shortcut icon" href="favicon.ico"/>
     <script type="text/javascript" src="./ample/runtime.js"></script>
     <script type="text/javascript" src="./ample/languages/xul/xul.js"></script>
     <script type="text/javascript" src="./ample/languages/xhtml/xhtml.js"></script>
@@ -9,7 +13,7 @@
     <link type="text/ample+css" href="./ample/languages/xul/themes/default/style.css" rel="stylesheet"/>
 
     <script type="text/javascript" src="throbber.js"></script>
-    <script type="text/javascript" src="ODBCexplorer.js"></script>
+    <script type="text/javascript" src="ODBCexplorer.js?v=1.56"></script>
 
     <style type="text/css">
 	html, body {
@@ -77,7 +81,7 @@
   <input id="connect" value="Connect" onclick="Connection()" onkeyup="onKeyUp('connect',event)" type="button">
   </td>
   <td style="text-align: right" width="100px">
-   Ver: 1.42
+   Ver: 1.56
   </td>
   </tr>
   </table>
@@ -86,7 +90,6 @@
 
 <xul:page
   xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
-  xmlns:xhtml="http://www.w3.org/1999/xhtml"
   xmlns:xi="http://www.w3.org/2001/XInclude">
 
   <xul:spacer height="10"/>
@@ -192,7 +195,7 @@
 	        <xul:spacer width="10"/>
 	        <a id="exec_plink" target="_blank" href="" > permalink </a>
 	        <xul:spacer width="10"/>
-                <xul:button id="buttonPrev" label="Prev_Query" disabled="true" onclick="prevQuery()" />
+                <xul:button id="buttonPrev" label="Back" disabled="true" onclick="prevQuery()" />
 
               </xul:hbox>
    	      <xul:spacer height="5"/>
@@ -244,7 +247,7 @@
 
    <xul:hbox align="center" pack="stretch">
     <xul:spacer width="20"/>
-    Restore
+    Resolving URI
     <xul:spacer width="20"/>
     <xul:image src="throbber.gif"/>
     <xul:spacer width="20"/>
