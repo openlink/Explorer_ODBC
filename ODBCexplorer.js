@@ -280,7 +280,7 @@ function DoConnect(path)
                 ctree.append( 
               '<xul:tree flex="1" id="db" xmlns:xul="'+sXULNS+'">'+
                 '<xul:treecols>'+
-	          '<xul:treecol id="dbcol" label="DbCatalogs" width="'+(max_len*pixPerCh+30)+'" primary="true"/>'+
+	          '<xul:treecol id="dbcol" label="Databases" width="'+(max_len*pixPerCh+30)+'" primary="true"/>'+
 	        '</xul:treecols>'+
 		  '<xul:treebody >'+
 		    '<xul:treechildren id="dbList">'+scat+'</xul:treechildren>'+
