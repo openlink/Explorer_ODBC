@@ -1688,7 +1688,7 @@ function loadIntLinks(lstbox, tbl_id, col, col_val, tkey_list, add_pkey,
               r_path = r_path + "\""+relation.sch+"\".";
 
 	    r_from = ", "+r_path+"\""+relation.r_tbl+"\" r ";
-	    r_where = " AND p.\""+col+"\"=r.\""+relation.r_col+"\" ";
+	    r_where = " AND p.\""+relation.p_col+"\"=r.\""+relation.r_col+"\" ";
 	    if (typeof(relation.rel_types)==="undefined") {
 	      rel_types = 0;
 	      rel_col = null;
